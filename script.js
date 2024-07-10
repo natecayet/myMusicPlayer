@@ -145,6 +145,31 @@ const playNextSong = () => {
 
         playSong(nextSong);
     }
+};
+
+//play previous song
+const playPreviousSong = () => {
+    if (userData?.currentSong === null) {
+        playSong(userData?.songs[0].id);
+    }else {
+        const currentSongIndex = getCurrentSongIndex();
+        const previousSong = userData.songs[currentSongIndex - 1].id;
+
+        playSong(previousSong);
+    }
+};
+
+//stop song
+const stopSong = () => {
+    audio.src = "";
+    audio.title = "";
+    audio.currentTime = 0;
+    userData.currentSong = null;
+    userData.songCurrentTime = 0;
+
+    playBtn.classList.remove('playing');
+    renderSongs(userData?.songs)
+    setPlayerDisplay();
 }
 
 //change center display to current song playing
@@ -188,7 +213,7 @@ const renderSongs = (arr) => {
 
 const getCurrentSongIndex = () => userData?.songs.indexOf(userData?.currentSong);
 
-const getImg = () => userData?.currentSong === null ? userData?.songs[0].img : userData?.currentSong.img;
+const getImg = () => userData?.currentSong === null ? "./cover/album-cover.jpg" : userData?.currentSong.img;
 
 const highlightCurrentSong = () => {
     const playlistSongElements = document.querySelectorAll(".song-container");
@@ -214,5 +239,9 @@ playBtn.addEventListener("click", () => {
 pauseBtn.addEventListener('click', pauseSong);
 
 nextBtn.addEventListener('click', playNextSong);
+
+previousBtn.addEventListener('click', playPreviousSong);
+
+stopBtn.addEventListener('click', stopSong);
 
 renderSongs(userData?.songs);

@@ -56,7 +56,7 @@ svg:active {
 
 aside {
     height: 100%;
-    width: 335px;
+    min-width: 335px;
     background-color: rgba(33, 32, 32, 0.74);
 }
 
@@ -146,7 +146,7 @@ aside {
     scrollbar-width: none;
 }
 
-#song-container {
+.song-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -157,12 +157,12 @@ aside {
     border-bottom: 2px solid rgb(47, 45, 45);
 }
 
-#song-container p {
+.song-container p {
     margin-left: 10px;
     color:rgba(245, 245, 245, 0.705);
 }
 
-#song-container button {
+.song-container button {
     margin-right: 10px;
 }
 
@@ -183,4 +183,8 @@ aside {
 
 #song-artist {
     font-size: 12px;
+}
+
+[aria-current="true"] div p {
+    color: goldenrod;
 }

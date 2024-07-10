@@ -108,6 +108,7 @@ let userData = {
     songCurrentTime: 0,
 };
 
+//play song
 const playSong = (id) => {
     const song = userData?.songs.find((song) => song.id === id);
     audio.src = song.src;
@@ -121,10 +122,32 @@ const playSong = (id) => {
     userData.currentSong = song;
     playBtn.classList.add('playing');
 
-    setPlayerDisplay()
-    audio.play()
+    highlightCurrentSong();
+    setPlayerDisplay();
+    audio.play();
 };
 
+//pause song
+const pauseSong = () => {
+    userData.songCurrentTime = audio.currentTime;
+
+    playBtn.classList.remove('playing');
+    audio.pause();
+};
+
+//play next song
+const playNextSong = () => {
+    if (userData?.currentSong === null) {
+        playSong(userData?.songs[0].id);
+    }else {
+        const currentSongIndex = getCurrentSongIndex();
+        const nextSong = userData.songs[currentSongIndex + 1].id;
+
+        playSong(nextSong);
+    }
+}
+
+//change center display to current song playing
 const setPlayerDisplay = () => {
     const playingSong = document.getElementById('current-song-title');
     const songArtist = document.getElementById('current-song-artist');
@@ -137,7 +160,7 @@ const setPlayerDisplay = () => {
     <img src="${getImg()}">
     `;
 
-    background.style.backgroundImage = `url("${getImg()}")`
+    background.style.backgroundImage = `url("${getImg()}")`;
     
     songImg.innerHTML = imgHTML;
     playingSong.textContent = currentTitle ? currentTitle : "Music Player";
@@ -147,7 +170,7 @@ const setPlayerDisplay = () => {
 const renderSongs = (arr) => {
     const songHTML = arr.map((song) => {
         return `
-        <div id="song-container" class="song-${song.id}">
+        <div id="song-${song.id}" class="song-container">
             <div id="song-info">
                 <p id="song-title">${song.title}</p>
                 <p id="song-artist">${song.artist}</p>
@@ -168,14 +191,17 @@ const getCurrentSongIndex = () => userData?.songs.indexOf(userData?.currentSong)
 const getImg = () => userData?.currentSong === null ? userData?.songs[0].img : userData?.currentSong.img;
 
 const highlightCurrentSong = () => {
-    const songTitle = document.getElementById('song-title');
-    const selectArtist = document.getElementById('song-artist');
-    const songTime = document.getElementById('song-time');
+    const playlistSongElements = document.querySelectorAll(".song-container");
+    const songToHighlight = document.getElementById(`song-${userData?.currentSong?.id}`);
+  
+    playlistSongElements.forEach((songEl) => {
+      songEl.removeAttribute("aria-current");
+    });
+  
+    if (songToHighlight) songToHighlight.setAttribute("aria-current", "true");
+  };
 
-    songTitle.style.color = "gold";
-    selectArtist.style.color = "gold";
-    songTime.style.color = "gold";
-}
+//button event listeners
 
 playBtn.addEventListener("click", () => {
     if (userData?.currentSong === null) {
@@ -185,5 +211,8 @@ playBtn.addEventListener("click", () => {
     }
 });
 
+pauseBtn.addEventListener('click', pauseSong);
+
+nextBtn.addEventListener('click', playNextSong);
+
 renderSongs(userData?.songs);
-console.log(getImg())

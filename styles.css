@@ -200,7 +200,6 @@ aside {
 
 #audio-progress::-webkit-slider-thumb {
     -webkit-appearance: none;
-    transform: scale(0.5);
     background: white;
     width: 10px;
     height: 10px;

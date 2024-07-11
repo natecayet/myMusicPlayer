@@ -9,6 +9,8 @@ const currentSongTitle = document.getElementById('current-song-title');
 const currentSongArtist = document.getElementById('current-song-artist');
 
 const playlistContainer = document.getElementById('playlist-container');
+const background = document.getElementById('container');
+const songImg = document.getElementById('current-song-img-container');
 
 const allSongs = [
     {
@@ -167,19 +169,19 @@ const stopSong = () => {
     userData.currentSong = null;
     userData.songCurrentTime = 0;
 
+    background.style.backgroundImage = `url("./cover/album-cover.jpg")`;
+    songImg.innerHTML = "";
+
     playBtn.classList.remove('playing');
     renderSongs(userData?.songs)
-    setPlayerDisplay();
-}
+};
 
 //change center display to current song playing
 const setPlayerDisplay = () => {
     const playingSong = document.getElementById('current-song-title');
     const songArtist = document.getElementById('current-song-artist');
-    const songImg = document.getElementById('current-song-img-container');
     const currentTitle = userData?.currentSong?.title;
     const currentArtist = userData?.currentSong?.artist;
-    const background = document.getElementById('container');
 
     const imgHTML = `
     <img src="${getImg()}">
@@ -190,7 +192,7 @@ const setPlayerDisplay = () => {
     songImg.innerHTML = imgHTML;
     playingSong.textContent = currentTitle ? currentTitle : "Music Player";
     songArtist.textContent = currentArtist ? currentArtist : "natecayet";
-}
+};
 
 const renderSongs = (arr) => {
     const songHTML = arr.map((song) => {
@@ -213,7 +215,7 @@ const renderSongs = (arr) => {
 
 const getCurrentSongIndex = () => userData?.songs.indexOf(userData?.currentSong);
 
-const getImg = () => userData?.currentSong === null ? "./cover/album-cover.jpg" : userData?.currentSong.img;
+const getImg = () => userData?.currentSong === null ? "" : userData?.currentSong.img;
 
 const highlightCurrentSong = () => {
     const playlistSongElements = document.querySelectorAll(".song-container");
@@ -225,6 +227,33 @@ const highlightCurrentSong = () => {
   
     if (songToHighlight) songToHighlight.setAttribute("aria-current", "true");
   };
+
+//progress bar
+let progress = document.getElementById('audio-progress');
+    
+
+audio.onloadedmetadata = function(){
+    progress.max = Math.round(audio.duration);
+    progress.value = audio.currentTime;
+};
+    
+if (audio.play()) {
+    setInterval(() => {
+        progress.value = audio.currentTime;
+        let x = progress.value / Math.round(progress.max)
+        progress.style.background = `linear-gradient(90deg, white ${x*99}%, rgba(245, 245, 245, 0.705) ${x*99}%)`;
+
+        //auto play next song
+        if (progress.value === progress.max) {
+            playNextSong();
+        };
+    }, 500);
+};
+
+progress.onchange = function(){
+    audio.play();
+    audio.currentTime = progress.value;
+}
 
 //button event listeners
 

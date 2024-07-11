@@ -116,6 +116,9 @@ aside {
     font-weight: bold;
 }
 
+[aria-current="true"] div p {
+    color: goldenrod;
+}
 
 /* Sidebar */
 #sidebar-image-container {
@@ -185,6 +188,25 @@ aside {
     font-size: 12px;
 }
 
-[aria-current="true"] div p {
-    color: goldenrod;
+/* audio progress bar */
+#audio-progress {
+    -webkit-appearance: none;
+    margin-top: -10px;
+    width: 80%;
+    height: 2px;
+    border: none;
+    color: white;
+}
+
+#audio-progress::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    transform: scale(0.5);
+    background: white;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+#audio-progress::-webkit-slider-thumb:active {
+    transform: scale(1.2);
 }

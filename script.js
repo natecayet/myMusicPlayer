@@ -172,6 +172,8 @@ const stopSong = () => {
     background.style.backgroundImage = `url("./cover/album-cover.jpg")`;
     songImg.innerHTML = "";
 
+    setPlayerDisplay();
+
     playBtn.classList.remove('playing');
     renderSongs(userData?.songs)
 };
@@ -187,9 +189,9 @@ const setPlayerDisplay = () => {
     <img src="${getImg()}">
     `;
 
-    background.style.backgroundImage = `url("${getImg()}")`;
+    background.style.backgroundImage = userData?.currentSong ? `url("${getImg()}")` : `url("./cover/album-cover.jpg")`;
+    songImg.innerHTML = userData?.currentSong ? imgHTML : "";
     
-    songImg.innerHTML = imgHTML;
     playingSong.textContent = currentTitle ? currentTitle : "Music Player";
     songArtist.textContent = currentArtist ? currentArtist : "natecayet";
 };
